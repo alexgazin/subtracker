@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  plan          String         @default("FREE") // 'FREE' | 'PRO'
+  role          String         @default("USER") // 'USER' | 'ADMIN'
+  lastLoginAt   DateTime?
+  createdAt     DateTime       @default(now())
+  subscriptions Subscription[]
+  notifications Notification[]
+  events        Event[]
+  inboxItems    PaymentInbox[]
+}
+
+model Subscription {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  name            String
+  price           Float
+  currency        String   @default("USD")
+  billingCycle    String   // 'MONTHLY' | 'YEARLY' | 'WEEKLY'
+  startDate       DateTime
+  nextBillingDate DateTime
+  category        String?
+  notes           String?
+  trialEndDate    DateTime?
+  trialPrice      Float?
+  isFavorite      Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  isArchived      Boolean  @default(false)
+  utilityStatus   String   @default("ACTIVE") // 'ACTIVE' | 'SOMETIMES' | 'NOT_USING'
+  lastUsedAt      DateTime?
+  utilityStatusUpdatedAt DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  priceHistory    PriceHistory[]
+  inboxItems      PaymentInbox[]
+}
+
+model PriceHistory {
+  id             String       @id @default(uuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  oldPrice       Float
+  newPrice       Float
+  changedAt      DateTime     @default(now())
+}
+
+model PaymentInbox {
+  id             String       @id @default(uuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  expectedDate   DateTime
+  amount         Float
+  currency       String
+  status         String       @default("PENDING") // 'PENDING' | 'RESOLVED' | 'ARCHIVED'
+  userResponse   String?      // 'PAID' | 'CANCELLED' | 'NOT_CHARGED'
+  createdAt      DateTime     @default(now())
+  resolvedAt     DateTime?
+}
+
+model Event {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  type      String   // 'user_registered', 'user_logged_in', etc.
+  metadata  String?  // JSON string
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String   // 'BILLING_SOON' | 'BILLING_TODAY' | 'LIMIT_REACHED' | 'SYSTEM'
+  title     String
+  body      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

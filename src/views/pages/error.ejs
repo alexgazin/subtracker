@@ -1,0 +1,8 @@
+<% const errorBody = `
+<div style="text-align: center; padding: 4rem 0;">
+    <h1 style="font-size: 6rem; color: var(--primary-color); margin-bottom: 1rem;">${code}</h1>
+    <h2 style="margin-bottom: 2rem;">${message}</h2>
+    <a href="/" class="btn btn-primary">Вернуться на главную</a>
+</div>
+`; %>
+<%- include('../layout', { body: errorBody }) %>

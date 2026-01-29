@@ -1,0 +1,65 @@
+<% const dashBody = (function(){
+    let s = '';
+    // handle pendingInboxCards via server variable
+    if (typeof pendingInboxCards !== 'undefined' && pendingInboxCards.length > 0) {
+        s += `<div class="inbox-promo"><div><h3>У вас ${pendingInboxCards.length} новых события в Inbox</h3><p>Подтвердите недавние платежи, чтобы прогноз оставался точным.</p></div><a href="/app/inbox" class="btn-inbox-white">Открыть Inbox</a></div>`;
+    }
+
+    s += `<div class="grid">`;
+    s += `<div class="card"><div class="stat-label">Расходы в месяц</div><div class="stat-val">${monthlyTotal} $</div></div>`;
+    s += `<div class="card"><div class="stat-label">Расходы в год</div><div class="stat-val">${yearlyTotal} $</div></div>`;
+    s += `<div class="card"><div class="stat-label">Активных подписок</div><div class="stat-val">${subscriptions.length}</div></div>`;
+    s += `</div>`;
+
+    if (user && user.plan === 'FREE') {
+        s += `<div class="ad-placeholder"><strong>Рекламный блок</strong><br>Здесь могла быть ваша реклама. Перейдите на PRO, чтобы скрыть этот блок.</div>`;
+    }
+
+    s += `<div class="grid" style="grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">`;
+
+    // Left column: upcoming payments
+    s += `<div class="card"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">`;
+    s += `<h3 style="margin: 0;">Ближайшие списания</h3><a href="/app/subscriptions" style="font-size: 0.9rem;">Все подписки</a>`;
+    s += `</div>`;
+
+    if (upcomingPayments && upcomingPayments.length > 0) {
+        s += `<table><thead><tr><th>Название</th><th>Сумма</th><th>Дата списания</th></tr></thead><tbody>`;
+        upcomingPayments.forEach(p => {
+            s += `<tr><td><strong>${p.name}</strong></td><td>${p.price} ${ExchangeRateService.getSymbol(p.currency)}</td><td>${new Date(p.nextBillingDate).toLocaleDateString('ru-RU')}</td></tr>`;
+        });
+        s += `</tbody></table>`;
+    } else {
+        s += `<div style="text-align: center; padding: 2rem;"><p style="color: var(--text-muted); margin-bottom: 1.5rem;">У вас пока нет активных подписок.</p><div style="background: var(--bg-color); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;"><h4 style="margin-top: 0;">Попробуйте добавить популярные сервисы:</h4><div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem;"><span class="badge suggested-service" data-name="Netflix" style="position: static; cursor: pointer;">Netflix</span><span class="badge suggested-service" data-name="Spotify" style="position: static; cursor: pointer;">Spotify</span><span class="badge suggested-service" data-name="YouTube Premium" style="position: static; cursor: pointer;">YouTube</span><span class="badge suggested-service" data-name="ChatGPT Plus" style="position: static; cursor: pointer;">ChatGPT</span></div></div>`;
+        if (isLimitReached) {
+            s += `<div style="position: relative; display: inline-block;"><button class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;" title="Достигнут лимит 10 подписок. Купите PRO аккаунт для добавления новых." onclick="event.preventDefault();">Добавить первую подписку</button><div class="limit-tooltip">Для добавления больше 10 подписок купите PRO аккаунт</div></div>`;
+        } else {
+            s += `<a href="/app/subscriptions/new" class="btn btn-primary">Добавить первую подписку</a>`;
+        }
+        s += `</div>`;
+    }
+
+    s += `</div>`; // close left card
+
+    // Right column: spending by category
+    s += `<div class="card"><h3 style="margin-top: 0; margin-bottom: 1rem;">По категориям</h3>`;
+    if (spendingByCategory && spendingByCategory.length > 0) {
+        s += `<div style="display: flex; flex-direction: column; gap: 0.8rem;">`;
+        spendingByCategory.forEach(c => {
+            const width = monthlyTotal ? Math.min(100, (c.value / parseFloat(monthlyTotal)) * 100) : 0;
+            s += `<div><div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.3rem;"><span>${c.name}</span><strong>${c.value} $</strong></div><div style="background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden;"><div style="background: var(--primary-color); height: 100%; width: ${width}%;"></div></div></div>`;
+        });
+        s += `</div>`;
+    } else {
+        s += `<p style="color: var(--text-muted);">Нет данных</p>`;
+    }
+    s += `</div>`; // close right card
+
+    s += `</div>`; // close grid
+
+    // client script
+    s += `<script>document.addEventListener('DOMContentLoaded', () => { document.querySelectorAll('.suggested-service').forEach(badge => { badge.addEventListener('click', () => { if (${isLimitReached}) { alert('Вы достигли лимита в 10 подписок. Перейдите на PRO для добавления новых.'); } else { const name = badge.getAttribute('data-name'); window.location.href = '/app/subscriptions/new?name=' + encodeURIComponent(name); } }); }); });</script>`;
+
+    return s;
+})(); %>
+
+<%- include('../layout', { body: dashBody }) %>

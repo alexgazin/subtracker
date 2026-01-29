@@ -1,0 +1,587 @@
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg-color: #f9fafb;
+    --card-bg: #ffffff;
+    --text-color: #111827;
+    --text-muted: #6b7280;
+    --border-color: #e5e7eb;
+    --danger: #ef4444;
+}
+
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --primary-color: #818cf8;
+    --primary-hover: #6366f1;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.main-header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-left: 1.5rem;
+    font-size: 0.95rem;
+    position: relative;
+}
+
+.nav a.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Ensure nav badges are inline to the right of link text (header & sidebar) */
+.nav a .badge, .sidebar-nav a .badge { position: static !important; margin-left: 8px; top: auto; right: auto; display: inline-block; }
+
+.notif-link {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background: var(--danger);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* Dashboard Inbox Promo */
+.inbox-promo {
+    background: linear-gradient(135deg, var(--primary-color), #818cf8);
+    color: white;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+}
+
+.inbox-promo h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.inbox-promo p {
+    margin: 0.25rem 0 0;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.btn-inbox-white {
+    background: white;
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+.btn-inbox-white:hover {
+    transform: scale(1.05);
+}
+
+.content {
+    padding: 2rem 0;
+    min-height: 80vh;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.limit-tooltip {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.limit-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+div:hover > .limit-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.btn-danger {
+    background: #fee2e2;
+    color: var(--danger);
+}
+
+.ad-placeholder {
+    background: #f3f4f6;
+    border: 2px dashed #d1d5db;
+    color: #9ca3af;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+}
+
+.error-msg {
+    color: var(--danger);
+    margin-bottom: 1rem;
+}
+
+/* Password validation styles */
+.password-requirements {
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+
+.requirement {
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.requirement.valid {
+    color: #10b981; /* Success green */
+}
+
+.requirement::before {
+    content: "•";
+    margin-right: 0.5rem;
+}
+
+/* Inbox Styles */
+.inbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.inbox-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.inbox-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.inbox-card.resolved {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.inbox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.inbox-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.inbox-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.inbox-amount {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.inbox-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.btn-inbox {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-inbox:hover {
+    background: var(--border-color);
+}
+
+.btn-inbox.paid:hover {
+    background: #dcfce7;
+    border-color: #22c55e;
+    color: #15803d;
+}
+
+.btn-inbox.cancelled:hover {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #b91c1c;
+}
+
+.btn-inbox.failed:hover {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #b45309;
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translate(-50%, 2rem); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.toast-undo {
+    color: #818cf8;
+    background: none;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.inbox-badge {
+    background: var(--danger);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+
+/* Favorite heart styles */
+.favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    transition: transform 0.2s, color 0.2s;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.2);
+}
+
+.favorite-btn.active {
+    color: #ef4444;
+}
+
+.filter-btn-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-val {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Simulator styles */
+.simulator-bar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card-bg);
+    border-top: 2px solid var(--primary-color);
+    padding: 1rem;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+    display: none; /* Hidden by default, shown when items are selected */
+    z-index: 100;
+}
+
+.simulator-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.savings-info {
+    display: flex;
+    gap: 2rem;
+}
+
+.savings-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.savings-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.savings-value {
+    font-weight: bold;
+    color: #10b981;
+    font-size: 1.2rem;
+}
+
+.sub-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Layout: Sidebar + Content */
+.app-layout{display:flex;align-items:flex-start}
+.sidebar{position:fixed;left:0;top:0;height:100vh;width:280px;background:var(--card-bg);border-right:1px solid var(--border-color);transform:translateX(-100%);transition:transform 280ms ease, box-shadow 280ms ease;z-index:1100;overflow:auto}
+.sidebar.open{transform:translateX(0);box-shadow: 8px 0 30px rgba(2,6,23,0.08)}
+.sidebar-inner{padding:1.25rem}
+.sidebar-close{background:none;border:0;font-size:1.1rem;float:right;cursor:pointer}
+.sidebar-nav{display:flex;flex-direction:column;gap:0.6rem;margin-top:1rem}
+.sidebar-nav a{display:flex;align-items:center;gap:8px;padding:0.6rem 0.8rem;color:var(--text-color);}
+.sidebar-nav a:hover{background:rgba(79,70,229,0.04)}
+.sidebar-nav a .icon{font-size:18px}
+
+/* Sidebar pin button */
+.sidebar-controls{display:flex;justify-content:space-between;align-items:center}
+.sidebar-pin{background:none;border:0;cursor:pointer;font-size:1rem;padding:6px;border-radius:6px}
+.sidebar-pin[aria-pressed='true']{background:rgba(79,70,229,0.08)}
+
+/* Pinned behavior: keep sidebar visible and shift page-content on large screens */
+.sidebar.pinned{position:fixed;transform:none}
+body.sidebar-pinned .page-content{margin-left:320px}
+
+/* Notification badge inline to the right of link text */
+.sidebar-nav a .badge{position:static;margin-left:8px;background:var(--danger);color:#fff;padding:2px 6px;border-radius:8px;font-size:0.75rem}
+
+/* Header minimal styling */
+.header-actions{display:flex;align-items:center;gap:8px}
+
+/* Slightly larger active sidebar link */
+.sidebar-nav a.active{background:linear-gradient(90deg, rgba(79,70,229,0.08), rgba(129,140,248,0.04));color:var(--primary-color);font-weight:700}
+
+.page-content{margin-left:0;flex:1;padding:2rem 1rem;max-width:1000px}
+
+/* when sidebar open on larger screens, add left padding to content so it's centered */
+@media(min-width:900px){
+    .page-content{margin-left:320px;padding-left:2rem;padding-right:2rem}
+}
+
+/* overlay for small screens */
+body.no-scroll::after{content:'';position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:1050}
+
+/* adjust header layout to accommodate menu toggle */
+.left-controls{display:flex;align-items:center;gap:0.75rem}
+.menu-toggle{background:none;border:0;font-size:1.1rem;cursor:pointer;padding:0.25rem 0.5rem;border-radius:6px}
+.menu-toggle:focus{outline:3px solid rgba(79,70,229,0.12);outline-offset:2px}
+
+/* reduce top nav visibility on small screens (we're moving nav into sidebar) */
+@media(max-width:800px){
+    .nav a{display:none}
+    .badge{top:-6px;right:-6px}
+}
+
+/* Ensure content has breathing room */
+.container.page-content{max-width:1100px}

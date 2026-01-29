@@ -1,0 +1,21 @@
+<header class="main-header">
+    <div class="container header-content">
+        <div class="left-controls">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+            <a href="/" class="logo">SubTracker</a>
+        </div>
+        <nav class="nav">
+            <% if (user) { %>
+                <!-- For logged in users keep header minimal: nav links are in sidebar -->
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle">🌙</button>
+                </div>
+            <% } else { %>
+                <a href="/pricing">Тарифы</a>
+                <a href="/login">Вход</a>
+                <a href="/register" class="btn btn-primary">Начать бесплатно</a>
+                <button class="theme-toggle" id="theme-toggle">🌙</button>
+            <% } %>
+        </nav>
+    </div>
+</header>

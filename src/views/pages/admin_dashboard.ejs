@@ -1,0 +1,44 @@
+<% const adminDashBody = `
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2>Панель администратора</h2>
+    <a href="/app/admin/users" class="btn btn-primary">Пользователи</a>
+</div>
+
+<div class="grid">
+    <div class="card">
+        <div class="stat-label">Всего пользователей</div>
+        <div class="stat-val">${stats.usersCount}</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">Всего подписок</div>
+        <div class="stat-val">${stats.subsCount}</div>
+    </div>
+    <div class="card">
+        <div class="stat-label">Всего событий</div>
+        <div class="stat-val">${stats.eventsCount}</div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 1.5rem;">
+    <h3>Последние пользователи</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>План</th>
+                <th>Дата регистрации</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${recentUsers.map(u => `
+                <tr>
+                    <td>${u.email}</td>
+                    <td>${u.plan}</td>
+                    <td>${new Date(u.createdAt).toLocaleDateString('ru-RU')}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+</div>
+`; %>
+<%- include('../layout', { body: adminDashBody }) %>

@@ -1,0 +1,71 @@
+<% const inboxBody = (function(){
+    let s = '';
+    s += `<div style="max-width: 800px; margin: 0 auto;">`;
+    s += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">`;
+    s += `<h2 style="margin: 0;">Inbox платежей</h2>`;
+    s += `<span style="font-size: 0.9rem; color: var(--text-muted);">${cards.length} ожидают подтверждения</span>`;
+    s += `</div>`;
+
+    if (!cards || cards.length === 0) {
+        s += `<div class="card" style="text-align: center; padding: 4rem 2rem;">`;
+        s += `<div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>`;
+        s += `<h3>Все чисто!</h3>`;
+        s += `<p style="color: var(--text-muted); margin-top: 0.5rem;">У вас нет неподтвержденных платежей на текущий момент.</p>`;
+        s += `<a href="/app/dashboard" class="btn btn-primary" style="margin-top: 1.5rem;">Вернуться на дашборд</a>`;
+        s += `</div>`;
+    } else {
+        s += `<div class="inbox-container">`;
+        cards.forEach(card => {
+            s += `<div id="card-${card.id}" class="inbox-card">`;
+            s += `<div class="inbox-header">`;
+            s += `<div>`;
+            s += `<div class="inbox-title">${card.subscription && card.subscription.name ? card.subscription.name : ''}</div>`;
+            s += `<div class="inbox-date">Ожидалось: ${new Date(card.expectedDate).toLocaleDateString('ru-RU')}</div>`;
+            s += `</div>`;
+            s += `<div class="inbox-amount">${card.amount} ${ExchangeRateService.getSymbol(card.currency)}</div>`;
+            s += `</div>`;
+            s += `<p style="font-size: 0.95rem; color: var(--text-color); margin-bottom: 1rem;">Мы ожидали списание по этой подписке. Что случилось?</p>`;
+            s += `<div class="inbox-actions">`;
+            s += `<button class="btn-inbox paid" onclick="handleResponse('${card.id}', 'PAID')">✅ Оплатил</button>`;
+            s += `<button class="btn-inbox failed" onclick="handleResponse('${card.id}', 'NOT_CHARGED')">❓ Не списалось</button>`;
+            s += `<button class="btn-inbox cancelled" onclick="handleResponse('${card.id}', 'CANCELLED')">❌ Отменил</button>`;
+            s += `</div>`;
+            s += `</div>`;
+        });
+        s += `</div>`;
+    }
+
+    s += `</div>`; // wrapper
+
+    s += `<script>`;
+    s += `async function handleResponse(cardId, response) {`;
+    s += `const cardElement = document.getElementById('card-' + cardId); if (!cardElement) return;`;
+    s += `cardElement.style.opacity = '0.5'; cardElement.style.pointerEvents = 'none';`;
+    s += `try {`;
+    s += `const res = await fetch('/app/inbox/response', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cardId, response }) });`;
+    s += `const data = await res.json();`;
+    s += `if (data.success) {`;
+    s += `cardElement.style.transform = 'translateX(100%)'; cardElement.style.opacity = '0';`;
+    s += `setTimeout(() => { cardElement.remove(); showToast('Ответ записан', cardId); checkEmptyState(); updateBadges(); }, 300);`;
+    s += `} else { throw new Error(data.error); }`;
+    s += `} catch (err) { console.error('Error:', err); if(cardElement){ cardElement.style.opacity='1'; cardElement.style.pointerEvents='all'; } alert('Ошибка: ' + err.message); }`;
+    s += `}`;
+
+    s += `function showToast(message, cardId) {`;
+    s += `const existing = document.querySelector('.toast'); if (existing) existing.remove();`;
+    s += `const toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = '<span>' + message + '</span><button class="toast-undo" onclick="undoResponse(\'' + cardId + '\')">Отменить</button>'; document.body.appendChild(toast);`;
+    s += `setTimeout(() => { if (toast.parentElement) { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); } }, 5000);`;
+    s += `}`;
+
+    s += `async function undoResponse(cardId) { const toast = document.querySelector('.toast'); if (toast) toast.remove(); try { const res = await fetch('/app/inbox/undo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cardId }) }); const data = await res.json(); if (data.success) { window.location.reload(); } } catch (err) { console.error('Undo error:', err); } }`;
+
+    s += `function checkEmptyState() { const container = document.querySelector('.inbox-container'); if (container && container.children.length === 0) { window.location.reload(); } }`;
+
+    s += `function updateBadges() { const badges = document.querySelectorAll('.inbox-badge'); badges.forEach(badge => { const count = parseInt(badge.textContent) - 1; if (count <= 0) { badge.remove(); } else { badge.textContent = count; } }); }`;
+
+    s += `</script>`;
+
+    return s;
+})(); %>
+
+<%- include('../layout', { body: inboxBody }) %>

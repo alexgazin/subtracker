@@ -1,0 +1,32 @@
+<% const pricingBody = `
+<div style="text-align: center; margin-bottom: 3rem;">
+    <h1>Наши тарифы</h1>
+    <p style="color: var(--text-muted);">Выберите подходящий план для управления вашими подписками</p>
+</div>
+
+<div class="grid" style="max-width: 800px; margin: 0 auto;">
+    <div class="card" style="text-align: center;">
+        <h3>Бесплатно</h3>
+        <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">0$ <small style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted)">/ всегда</small></div>
+        <ul style="list-style: none; text-align: left; margin: 2rem 0; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">✓ До 10 активных подписок</li>
+            <li style="margin-bottom: 0.5rem;">✓ Уведомления о списаниях</li>
+            <li style="margin-bottom: 0.5rem; color: var(--text-muted);">✗ Рекламные блоки</li>
+        </ul>
+        <a href="/register" class="btn" style="border: 1px solid var(--primary-color); color: var(--primary-color); width: 100%;">Начать</a>
+    </div>
+    <div class="card" style="text-align: center; border-color: var(--primary-color); position: relative;">
+        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 2px 12px; border-radius: 12px; font-size: 0.8rem;">РЕКОМЕНДУЕМ</div>
+        <h3>PRO</h3>
+        <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">9.99$ <small style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted)">/ навсегда (MVP)</small></div>
+        <ul style="list-style: none; text-align: left; margin: 2rem 0; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">✓ Безлимитные подписки</li>
+            <li style="margin-bottom: 0.5rem;">✓ Уведомления о списаниях</li>
+            <li style="margin-bottom: 0.5rem;">✓ Без рекламы</li>
+            <li style="margin-bottom: 0.5rem;">✓ Приоритетная поддержка</li>
+        </ul>
+        <a href="/register" class="btn btn-primary" style="width: 100%;">Купить PRO</a>
+    </div>
+</div>
+`; %>
+<%- include('../layout', { body: pricingBody }) %>

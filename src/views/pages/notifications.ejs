@@ -1,0 +1,138 @@
+<% const notifBody = `
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="margin: 0;">Уведомления</h2>
+        ${notifications.some(n => !n.isRead) ? `
+            <button id="mark-all-read-btn" class="btn btn-primary" style="font-size: 0.9rem;">Прочитать все</button>
+        ` : ''}
+    </div>
+    <div id="notifications-container" style="margin-top: 1.5rem;">
+        ${notifications.length > 0 ? notifications.map(n => `
+            <div id="notif-${n.id}" class="card notification-card ${n.isRead ? 'read' : 'unread'}" style="border-left: 4px solid ${n.isRead ? 'var(--border-color)' : 'var(--primary-color)'}; opacity: ${n.isRead ? '0.7' : '1'}; transition: all 0.3s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <h4 style="margin: 0;">${n.title}</h4>
+                        <p style="margin: 0.5rem 0;">${n.body}</p>
+                        <small style="color: var(--text-muted)">${new Date(n.createdAt).toLocaleString('ru-RU')}</small>
+                    </div>
+                    <button class="remove-btn" data-id="${n.id}" data-is-read="${n.isRead}" class="btn" style="font-size: 1.5rem; color: var(--text-muted); background: none; border: none; cursor: pointer; line-height: 1; padding: 0.5rem; margin: -0.5rem -0.5rem 0 0;" aria-label="Удалить">&times;</button>
+                </div>
+            </div>
+        `).join('') : '<div id="no-notifications" style="text-align: center; color: var(--text-muted); padding: 2rem;">У вас пока нет уведомлений.</div>'}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Делегирование событий для кнопок удаления
+    const container = document.getElementById('notifications-container');
+    if (container) {
+        container.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-btn');
+            if (removeBtn) {
+                const id = removeBtn.getAttribute('data-id');
+                const isRead = removeBtn.getAttribute('data-is-read') === 'true';
+                removeNotification(id, isRead);
+            }
+        });
+    }
+
+    // Кнопка "Прочитать все"
+    const markAllBtn = document.getElementById('mark-all-read-btn');
+    if (markAllBtn) {
+        markAllBtn.addEventListener('click', markAllRead);
+    }
+});
+
+async function removeNotification(id, isRead) {
+    const card = document.getElementById('notif-' + id);
+    if (!card) return;
+    
+    const btn = card.querySelector('.remove-btn');
+    if (btn) btn.disabled = true;
+
+    try {
+        const res = await fetch('/app/notifications/' + id, { 
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (!res.ok) throw new Error('Failed to delete notification');
+        
+        if (!isRead) {
+            const badge = document.querySelector('.badge');
+            if (badge) {
+                const count = parseInt(badge.innerText.trim()) - 1;
+                if (count <= 0) {
+                    badge.remove();
+                } else {
+                    badge.innerText = count;
+                }
+            }
+        }
+        
+        card.style.opacity = '0';
+        card.style.transform = 'translateX(20px)';
+        setTimeout(() => {
+            card.remove();
+            checkEmptyState();
+        }, 300);
+    } catch (err) {
+        console.error('Error:', err);
+        if (btn) btn.disabled = false;
+        alert('Не удалось удалить уведомление. Попробуйте еще раз.');
+    }
+}
+
+async function markAllRead() {
+    const markAllBtn = document.getElementById('mark-all-read-btn');
+    if (markAllBtn) markAllBtn.disabled = true;
+
+    try {
+        const res = await fetch('/app/notifications/mark-all-read', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (res.ok) {
+            const container = document.getElementById('notifications-container');
+            const allCards = container.querySelectorAll('.notification-card');
+            
+            allCards.forEach(card => {
+                card.style.opacity = '0.5';
+            });
+
+            setTimeout(() => {
+                allCards.forEach(card => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(-10px)';
+                });
+                
+                setTimeout(() => {
+                    container.innerHTML = '<div id="no-notifications" style="text-align: center; color: var(--text-muted); padding: 2rem;">У вас пока нет уведомлений.</div>';
+                    if (markAllBtn) markAllBtn.remove();
+                }, 300);
+            }, 500);
+
+            const badge = document.querySelector('.badge');
+            if (badge) badge.remove();
+        } else {
+             if (markAllBtn) markAllBtn.disabled = false;
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        if (markAllBtn) markAllBtn.disabled = false;
+    }
+}
+
+function checkEmptyState() {
+    const container = document.getElementById('notifications-container');
+    if (container && container.querySelectorAll('.notification-card').length === 0) {
+        container.innerHTML = '<div id="no-notifications" style="text-align: center; color: var(--text-muted); padding: 2rem;">У вас пока нет уведомлений.</div>';
+        const markAllBtn = document.getElementById('mark-all-read-btn');
+        if (markAllBtn) markAllBtn.remove();
+    }
+}
+</script>
+`; %>
+<%- include('../layout', { body: notifBody }) %>

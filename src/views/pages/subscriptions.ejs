@@ -1,0 +1,91 @@
+<% const subsBody = (function(){
+    let html = '';
+    html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">`;
+    html += `<h2>Мои подписки</h2>`;
+    html += `<div style="display: flex; gap: 1rem; align-items: center;">`;
+    html += `<button id="toggleFavorites" class="btn" style="border: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.5rem;"><span id="favIcon">🤍</span> Любимые</button>`;
+    html += `<a href="/app/export-csv" class="btn" style="border: 1px solid var(--border-color);">Экспорт CSV</a>`;
+    html += `<input type="text" id="subSearch" placeholder="Поиск по названию..." style="width: 200px; padding: 0.4rem;">`;
+
+    if (isLimitReached) {
+        html += `<div style="position: relative; display: inline-block;"><button class="btn btn-primary" style="opacity: 0.6; cursor: not-allowed;" title="Достигнут лимит 10 подписок. Купите PRO аккаунт для добавления новых." onclick="event.preventDefault();">+ Добавить</button><div class="limit-tooltip">Для добавления больше 10 подписок купите PRO аккаунт</div></div>`;
+    } else {
+        html += `<a href="/app/subscriptions/new" class="btn btn-primary">+ Добавить</a>`;
+    }
+
+    html += `</div></div>`;
+
+    html += `<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">`;
+    html += `<div>`;
+    html += `<a href="/app/subscriptions?status=active&sortBy=${sortBy}" class="btn ${status === 'active' ? 'btn-primary' : ''}" style="margin-right: 0.5rem;">Активные</a>`;
+    html += `<a href="/app/subscriptions?status=inactive&sortBy=${sortBy}" class="btn ${status === 'inactive' ? 'btn-primary' : ''}" style="margin-right: 0.5rem;">Архив</a>`;
+    html += `<a href="/app/subscriptions?status=all&sortBy=${sortBy}" class="btn ${status === 'all' ? 'btn-primary' : ''}">Все</a>`;
+    html += `</div>`;
+    html += `<div style="font-size: 0.9rem;">Сортировать по: <a href="/app/subscriptions?status=${status}&sortBy=date" style="margin-left: 0.5rem; color: ${sortBy === 'date' ? 'var(--primary-color)' : 'inherit'}; font-weight: ${sortBy === 'date' ? '600' : 'normal'}; text-decoration: none;">Дате</a> <a href="/app/subscriptions?status=${status}&sortBy=price" style="margin-left: 0.5rem; color: ${sortBy === 'price' ? 'var(--primary-color)' : 'inherit'}; font-weight: ${sortBy === 'price' ? '600' : 'normal'}; text-decoration: none;">Стоимости</a></div>`;
+    html += `</div>`;
+
+    if (user.plan === 'FREE') {
+        html += `<div class="ad-placeholder"><strong>Рекламный блок</strong><br>Здесь могла быть ваша реклама.</div>`;
+    }
+
+    html += `<div class="card" style="padding: 0;">`;
+    if (subscriptions.length > 0) {
+        html += `<div style="padding: 1rem; border-bottom: 1px solid var(--border-color); background: var(--bg-color); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;"><input type=\"checkbox\" id=\"selectAll\" class=\"sub-checkbox\"><label for=\"selectAll\" style=\"margin: 0; cursor: pointer;\"><strong>Сценарий экономии:</strong> выберите подписки, чтобы увидеть выгоду от отмены</label></div>`;
+        html += `<table><thead><tr><th style=\"width: 40px;\"></th><th>Название</th><th>Стоимость</th><th>Цикл</th><th>След. оплата</th><th>Действия</th></tr></thead><tbody>`;
+
+        subscriptions.forEach(sub => {
+            const isNotUsing = sub.utilityStatus === 'NOT_USING';
+            const isSometimes = sub.utilityStatus === 'SOMETIMES';
+            const statusUpdatedDate = new Date(sub.utilityStatusUpdatedAt);
+            const diffMonths = (new Date().getTime() - statusUpdatedDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+            const needsDecision = isSometimes && diffMonths >= 2;
+            let rowStyle = '';
+            if (isNotUsing) rowStyle = 'background-color: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger);';
+            else if (needsDecision) rowStyle = 'background-color: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b;';
+
+            const monthlyPrice = ExchangeRateService.convert(sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null ? sub.trialPrice : sub.price, sub.currency, 'USD') / (sub.billingCycle === 'YEARLY' ? 12 : (sub.billingCycle === 'WEEKLY' ? 7/30.44 : 1));
+            const yearlyPrice = ExchangeRateService.convert(sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null ? sub.trialPrice : sub.price, sub.currency, 'USD') * (sub.billingCycle === 'MONTHLY' ? 12 : (sub.billingCycle === 'WEEKLY' ? 52.14 : 1));
+
+            html += `<tr class="sub-row" data-favorite="${sub.isFavorite}" style="${rowStyle}" data-monthly="${monthlyPrice}" data-yearly="${yearlyPrice}">`;
+            html += `<td><input type="checkbox" class="sub-checkbox row-checkbox" data-id="${sub.id}"></td>`;
+            html += `<td><div style="display: flex; align-items: flex-start; gap: 0.5rem;"><button class="favorite-btn ${sub.isFavorite ? 'active' : ''}" data-id="${sub.id}" title="Добавить в избранное">${sub.isFavorite ? '❤️' : '🤍'}</button><div><div style="display: flex; align-items: center; gap: 0.4rem;"><strong>${sub.name}</strong><span title="${sub.utilityStatus === 'ACTIVE' ? 'Активно пользуюсь' : (sub.utilityStatus === 'SOMETIMES' ? 'Иногда' : 'Не пользуюсь')}">${sub.utilityStatus === 'ACTIVE' ? '✅' : (sub.utilityStatus === 'SOMETIMES' ? '😐' : '❌')}</span></div><small style="color: var(--text-muted)">${sub.category || ''}</small>`;
+            if (sub.trialEndDate && new Date(sub.trialEndDate) > new Date()) {
+                html += `<br><span style="font-size: 0.75rem; color: var(--primary-color); border: 1px solid var(--primary-color); border-radius: 4px; padding: 0 4px;">Промо до ${new Date(sub.trialEndDate).toLocaleDateString('ru-RU')}</span>`;
+            }
+            if (isNotUsing) {
+                html += `<div style="color: var(--danger); font-size: 0.75rem; font-weight: bold; margin-top: 0.2rem;">⚠️ Ты платишь за то, чем не пользуешься</div>`;
+            }
+            if (needsDecision) {
+                html += `<div style="color: #d97706; font-size: 0.75rem; font-weight: bold; margin-top: 0.2rem;">💡 Пора решить: пользуешься или нет? (уже ${Math.floor(diffMonths)} мес. в статусе "иногда")</div>`;
+            }
+            html += `</div></div></td>`;
+            html += `<td>${sub.trialEndDate && new Date(sub.trialEndDate) > new Date() && sub.trialPrice !== null ? sub.price : (sub.trialPrice !== null ? sub.trialPrice : sub.price)} ${ExchangeRateService.getSymbol(sub.currency)}`;
+            if (sub.trialEndDate && new Date(sub.trialEndDate) > new Date() && sub.trialPrice !== null) {
+                html += `<br><small style="color: var(--text-muted);">Будет: ${sub.trialPrice} ${ExchangeRateService.getSymbol(sub.currency)}</small>`;
+            } else if (sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null) {
+                html += `<br><small style="color: var(--primary-color); font-weight: bold;">(после промо)</small>`;
+            }
+            html += `</td>`;
+            html += `<td>${sub.billingCycle === 'MONTHLY' ? 'Месяц' : (sub.billingCycle === 'YEARLY' ? 'Год' : 'Неделя')}</td>`;
+            html += `<td>${new Date(sub.nextBillingDate).toLocaleDateString('ru-RU')}</td>`;
+            html += `<td><div style="display: flex; gap: 0.5rem;"><a href="/app/subscriptions/${sub.id}/edit" class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.8rem; border: 1px solid var(--border-color);">Редактировать</a><form action="/app/subscriptions/${sub.id}/delete" method="POST" style="display: inline;" class="delete-sub-form"><button type="submit" class="btn btn-danger" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Удалить</button></form></div></td>`;
+            html += `</tr>`;
+        });
+
+        html += `</tbody></table>`;
+    } else {
+        html += `<p style="padding: 2rem; text-align: center; color: var(--text-muted);">Подписки не найдены.</p>`;
+    }
+    html += `</div>`; // close card
+
+    // simulator bar
+    html += `<div id="simulatorBar" class="simulator-bar"><div class="simulator-content"><div style="display: flex; flex-direction: column;"><strong id="selectedCount">Выбрано: 0</strong><span style="font-size: 0.8rem; color: var(--text-muted);">Сценарий отмены</span></div><div class="savings-info"><div class="savings-item"><span class="savings-label">Экономия в месяц</span><span id="monthlySavings" class="savings-value">0.00 $</span></div><div class="savings-item"><span class="savings-label">Экономия в год</span><span id="yearlySavings" class="savings-value">0.00 $</span></div></div></div></div>`;
+
+    // scripts (kept minimal, original file has long scripts; render them inline as before)
+    html += `<script>document.addEventListener('DOMContentLoaded', () => { const searchInput = document.getElementById('subSearch'); const toggleFavoritesBtn = document.getElementById('toggleFavorites'); const favIcon = document.getElementById('favIcon'); let showOnlyFavorites = localStorage.getItem('showOnlyFavorites') === 'true'; if (showOnlyFavorites) { toggleFavoritesBtn && toggleFavoritesBtn.classList.add('btn-primary'); if(favIcon) favIcon.textContent = '❤️'; setTimeout(() => { if(window.filterRows) window.filterRows(); }, 0); } function filterRows() { const term = searchInput ? searchInput.value.toLowerCase() : ''; const rows = document.querySelectorAll('tbody tr.sub-row'); rows.forEach(row => { const nameCell = row.querySelector('td:nth-child(2) strong'); const isFavorite = row.getAttribute('data-favorite') === 'true'; if (nameCell) { const name = nameCell.textContent.toLowerCase(); const matchesSearch = name.includes(term); const matchesFavorite = !showOnlyFavorites || isFavorite; if (matchesSearch && matchesFavorite) { row.style.display = ''; } else { row.style.display = 'none'; } } }); updateSimulator(); } window.filterRows = filterRows; if (searchInput) { searchInput.addEventListener('input', filterRows); } if (toggleFavoritesBtn) { toggleFavoritesBtn.addEventListener('click', () => { showOnlyFavorites = !showOnlyFavorites; localStorage.setItem('showOnlyFavorites', showOnlyFavorites); if (showOnlyFavorites) { toggleFavoritesBtn.classList.add('btn-primary'); if(favIcon) favIcon.textContent = '❤️'; } else { toggleFavoritesBtn.classList.remove('btn-primary'); if(favIcon) favIcon.textContent = '🤍'; } filterRows(); }); } document.querySelectorAll('.favorite-btn').forEach(btn => { btn.addEventListener('click', async (e) => { e.preventDefault(); const id = btn.getAttribute('data-id'); btn.disabled = true; try { const res = await fetch('/app/subscriptions/' + id + '/toggle-favorite', { method: 'POST', headers: { 'Content-Type': 'application/json' } }); const data = await res.json(); if (data.success) { btn.classList.toggle('active', data.isFavorite); btn.textContent = data.isFavorite ? '❤️' : '🤍'; const row = btn.closest('tr'); row.setAttribute('data-favorite', data.isFavorite); if (showOnlyFavorites && !data.isFavorite) { filterRows(); } } } catch (err) { console.error('Error toggling favorite:', err); } finally { btn.disabled = false; } }); }); // simulator logic
+    const selectAll = document.getElementById('selectAll'); const rowCheckboxes = document.querySelectorAll('.row-checkbox'); const simulatorBar = document.getElementById('simulatorBar'); const monthlySavingsEl = document.getElementById('monthlySavings'); const yearlySavingsEl = document.getElementById('yearlySavings'); const selectedCountEl = document.getElementById('selectedCount'); function updateSimulator() { let monthlyTotal = 0; let yearlyTotal = 0; let count = 0; rowCheckboxes.forEach(cb => { if (cb.checked) { const row = cb.closest('tr'); monthlyTotal += parseFloat(row.dataset.monthly || 0); yearlyTotal += parseFloat(row.dataset.yearly || 0); count++; } }); if (count > 0) { simulatorBar && (simulatorBar.style.display = 'block'); monthlySavingsEl && (monthlySavingsEl.textContent = monthlyTotal.toFixed(2) + ' $'); yearlySavingsEl && (yearlySavingsEl.textContent = yearlyTotal.toFixed(2) + ' $'); selectedCountEl && (selectedCountEl.textContent = 'Выбрано: ' + count); } else { simulatorBar && (simulatorBar.style.display = 'none'); } } if (selectAll) { selectAll.addEventListener('change', () => { rowCheckboxes.forEach(cb => { if (cb.closest('tr').style.display !== 'none') { cb.checked = selectAll.checked; } }); updateSimulator(); }); } rowCheckboxes.forEach(cb => { cb.addEventListener('change', updateSimulator); }); document.querySelectorAll('.delete-sub-form').forEach(form => { form.addEventListener('submit', (e) => { if (!confirm('Удалить подписку?')) { e.preventDefault(); } }); }); });</script>`;
+
+    return html;
+})(); %>
+
+<%- include('../layout', { body: subsBody }) %>
