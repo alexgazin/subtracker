@@ -54,7 +54,14 @@ function mapHref(href, mapping) {
 async function renderPageToDirs(pageFile, outName, locals = {}, mapping) {
   const pagePath = path.join(pagesDir, pageFile);
   const pageContent = await ejs.renderFile(pagePath, locals, { filename: pagePath });
-  const layoutContent = await ejs.renderFile(layoutPath, { ...locals, body: pageContent }, { filename: layoutPath });
+
+  // If the page already contains a full HTML document (some templates include layout themselves),
+  // use it as-is. Otherwise render it into the layout.
+  let layoutContent = pageContent;
+  const isFullHtml = /<!doctype html>|<!DOCTYPE html>|<html[\s>]/i.test(pageContent);
+  if (!isFullHtml) {
+    layoutContent = await ejs.renderFile(layoutPath, { ...locals, body: pageContent }, { filename: layoutPath });
+  }
 
   let html = layoutContent;
 
@@ -79,7 +86,6 @@ async function renderPageToDirs(pageFile, outName, locals = {}, mapping) {
     return `src=".${src}"`;
   });
 
-  // ensure both dirs exist
   fs.mkdirSync(outDir, { recursive: true });
   fs.mkdirSync(docsDir, { recursive: true });
 
@@ -111,83 +117,28 @@ function copyPublicToDirs() {
 }
 
 function makeMockLocals() {
-  // Provide safe defaults for variables referenced in templates
-  const now = new Date();
-  const notifications = [
-    { id: 1, title: 'Тестовое уведомление', body: 'Это тест.', isRead: false, createdAt: now.toISOString() }
-  ];
-  const subscriptions = [
-    { id: 1, merchant: 'Spotify', amount: 9.99, currency: 'USD', nextDate: now.toISOString(), favorite: false, utility: false, name: 'Spotify', billingCycle: 'MONTHLY', price: 9.99, trialPrice: null, trialEndDate: null, nextBillingDate: now.toISOString(), isFavorite: false, utilityStatus: 'ACTIVE', utilityStatusUpdatedAt: now.toISOString() }
-  ];
-  const users = [
-    { id: 1, email: 'admin@example.com', role: 'ADMIN', plan: 'PRO', createdAt: now.toISOString(), _count: { subscriptions: subscriptions.length }, lastLoginAt: now.toISOString() }
-  ];
-  const cards = [
-    { id: 1, merchant: 'Netflix', amount: 12.99, date: now.toISOString(), status: 'pending' }
-  ];
-  const report = { year: new Date().getFullYear(), total: 123.45, subscriptions, inflationDetails: [], totalSpentYear: 500 };
-  const stats = { monthly: 12.34, yearly: 148.08, usersCount: 1, subsCount: subscriptions.length, eventsCount: 5 };
-  const monthlyTotal = stats.monthly;
-  const yearlyTotal = stats.yearly;
-
-  // simple exchange rate stub
-  const ExchangeRateService = {
-    convert: (value) => (typeof value === 'number' ? value : parseFloat(value) || 0),
-    getSymbol: (currency) => ({ USD: '$', EUR: '€', RUB: '₽' }[currency] || currency)
-  };
-
-  // spending breakdown mock (used on dashboard)
-  const spendingByCategory = [
-    { name: 'Entertainment', value: 6 },
-    { name: 'Subscriptions', value: 4.34 }
-  ];
-
-  // upcoming payments mock (used on dashboard)
-  const upcomingPayments = [
-    { id: 1, name: 'Spotify', price: 9.99, currency: 'USD', nextBillingDate: new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString() }
-  ];
-
-  return {
-    user: { id: 1, email: 'user@example.com', role: 'USER', plan: 'FREE' },
-    page: 'home',
-    pendingInboxCards: [],
-    unreadNotifications: notifications.filter(n => !n.isRead).length,
-    notifications,
-    subscriptions,
-    sub: null,
-    isLimitReached: false,
-    error: null,
-    success: null,
-    stats,
-    totals: { monthly: stats.monthly, yearly: stats.yearly },
-    users,
-    report,
-    monthlyTotal,
-    yearlyTotal,
-    cards,
-    recentUsers: users,
-    spendingByCategory,
-    upcomingPayments,
-    // helper flags
-    isAdmin: false,
-    sortBy: 'date',
-    status: 'all',
-    ExchangeRateService,
-    code: 500,
-    message: 'Internal error (mock)'
-  };
+  // Deprecated: static build will no longer inject mocks. Return an empty locals object.
+  return {};
 }
 
 (async () => {
   try {
     copyPublicToDirs();
-    const locals = makeMockLocals();
+
+    // Only render a small set of public marketing pages for static hosting.
+    const publicPages = new Set(['index.ejs', 'pricing.ejs', 'privacy.ejs', 'terms.ejs', 'support.ejs', 'login.ejs', 'register.ejs']);
+
     const mapping = buildMapping();
     const files = fs.readdirSync(pagesDir).filter(f => f.endsWith('.ejs'));
     for (const f of files) {
+      if (!publicPages.has(f)) {
+        console.log('Skipping dynamic page (not for static build):', f);
+        continue;
+      }
       const name = f.replace(/\.ejs$/, '.html');
-      await renderPageToDirs(f, name, locals, mapping);
+      await renderPageToDirs(f, name, {}, mapping);
     }
+
     console.log('Static site built to', outDir, 'and', docsDir);
   } catch (err) {
     console.error(err);
