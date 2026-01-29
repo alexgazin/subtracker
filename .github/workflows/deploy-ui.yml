@@ -1,4 +1,4 @@
-name: Deploy UI to GitHub Pages
+name: Deploy Static Site to GitHub Pages
 
 on:
   push:
@@ -35,13 +35,12 @@ jobs:
       - name: Run prisma generate (CI)
         run: npx prisma generate
 
-      - name: Install UI deps & build
-        working-directory: ui
-        run: npm install && npm run build
+      - name: Build static site
+        run: npm run build:static
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ui/dist
+          publish_dir: ./static
           publish_branch: gh-pages
