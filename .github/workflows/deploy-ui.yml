@@ -37,7 +37,7 @@ jobs:
 
       - name: Install UI deps & build
         working-directory: ui
-        run: npm ci && npm run build
+        run: npm install && npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
