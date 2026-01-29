@@ -44,34 +44,111 @@ MVP трекера подписок с личным кабинетом, увед
 
 ## Deploying the UI to GitHub Pages
 
-This repository includes a Vite React demo under `ui/` and a GitHub Actions workflow that builds `ui/` and deploys it to GitHub Pages (branch `gh-pages`).
+This repository includes a Vite React demo under `ui/` and a GitHub Actions workflow that automatically builds and deploys it to GitHub Pages.
 
-1. Create a feature branch, add all changes and push:
+### Quick Start
+
+The UI is now configured and ready to deploy! When you merge changes to the `master` branch:
+
+1. **Automatic Deployment**: The GitHub Actions workflow (`.github/workflows/deploy-ui.yml`) will automatically:
+   - Install dependencies
+   - Build the `ui/` app with production optimizations
+   - Deploy `ui/dist` to the `gh-pages` branch
+
+2. **Enable GitHub Pages** (first time setup):
+   - Go to your repository Settings → Pages
+   - Under "Build and deployment":
+     - Source: Deploy from a branch
+     - Branch: `gh-pages` / `(root)`
+   - Click Save
+
+3. **Access your site**:
+   - After the workflow completes, your site will be available at:
+   - `https://alexgazin.github.io/subtracker/`
+
+### Local Development
+
+To work on the UI locally:
 
 ```bash
-# from repo root
-git checkout -b feature/ui-first-deploy
-git add .
-git commit -m "feat(ui): initial UI demo + layout + pages"
-# set remote origin if not set
-git remote add origin git@github.com:YOUR_USERNAME/YOUR_REPO.git
-git push -u origin feature/ui-first-deploy
+# Navigate to UI directory
+cd ui
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:5173 in your browser
 ```
 
-2. Open a Pull Request on GitHub from `feature/ui-first-deploy` → `master` (you can do this via web or the GitHub CLI `gh`).
+### Manual Deployment (if needed)
 
-3. Once PR is merged to `master`, the GitHub Actions workflow `.github/workflows/deploy-ui.yml` will:
-   - install dependencies
-   - build the `ui/` app
-   - publish `ui/dist` to the `gh-pages` branch
+If you need to deploy manually:
 
-4. Enable GitHub Pages (if not already):
-   - In repository Settings → Pages, set the source to `gh-pages` branch (root).
-   - Optionally set a custom domain.
+```bash
+# Build the UI
+cd ui
+npm install
+npm run build
 
-Notes
-- The workflow uses `GITHUB_TOKEN` and `peaceiris/actions-gh-pages` to publish the site. No extra secrets required for default workflow.
-- If you prefer using a deploy SSH key, adjust the workflow to use `deploy_key` and store it in repository secrets.
+# The build output will be in ui/dist/
+```
+
+### Notes
+
+- The workflow uses `GITHUB_TOKEN` - no extra secrets needed
+- The UI is configured with base path `/subtracker/` for GitHub Pages
+- Build artifacts (`ui/dist/`) are automatically excluded from version control
+
+## Как сделать сайт доступным (GitHub Pages)
+
+Интерфейс в папке `ui/` настроен для автоматического развертывания на GitHub Pages.
+
+### Быстрый старт
+
+1. **Автоматическое развертывание**: При слиянии изменений в ветку `master`, GitHub Actions автоматически:
+   - Установит зависимости
+   - Соберет приложение в production режиме
+   - Развернет его на ветке `gh-pages`
+
+2. **Включить GitHub Pages** (первый раз):
+   - Перейдите в Settings → Pages вашего репозитория
+   - В разделе "Build and deployment":
+     - Source: Deploy from a branch
+     - Branch: `gh-pages` / `(root)`
+   - Нажмите Save
+
+3. **Доступ к сайту**:
+   - После завершения workflow, ваш сайт будет доступен по адресу:
+   - `https://alexgazin.github.io/subtracker/`
+
+### Локальная разработка UI
+
+```bash
+# Перейти в папку UI
+cd ui
+
+# Установить зависимости
+npm install
+
+# Запустить dev-сервер
+npm run dev
+
+# Открыть http://localhost:5173 в браузере
+```
+
+### Ручное развертывание (если требуется)
+
+```bash
+# Собрать UI
+cd ui
+npm install
+npm run build
+
+# Результат сборки будет в ui/dist/
+```
 
 ## Структура проекта
 - `src/server.ts` - Точка входа
