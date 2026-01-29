@@ -1,0 +1,17 @@
+admin_dashboard.ejs: OK
+admin_users.ejs: OK
+annual_report.ejs: OK
+dashboard.ejs: OK
+error.ejs: OK
+inbox.ejs: OK
+index.ejs: OK
+login.ejs: OK
+notifications.ejs: OK
+pricing.ejs: OK
+privacy.ejs: OK
+register.ejs: OK
+settings.ejs: OK
+subscription_form.ejs: OK
+subscriptions.ejs: OK
+support.ejs: OK
+terms.ejs: OK

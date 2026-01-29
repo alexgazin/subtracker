@@ -1,4 +1,4 @@
-<% const subsBody = (function(){
+<% const sortByLocal = (typeof sortBy !== 'undefined' ? sortBy : 'date'); const statusLocal = (typeof status !== 'undefined' ? status : 'all'); const subsBody = (function(){
     let html = '';
     html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">`;
     html += `<h2>Мои подписки</h2>`;
@@ -17,11 +17,11 @@
 
     html += `<div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">`;
     html += `<div>`;
-    html += `<a href="/app/subscriptions?status=active&sortBy=${sortBy}" class="btn ${status === 'active' ? 'btn-primary' : ''}" style="margin-right: 0.5rem;">Активные</a>`;
-    html += `<a href="/app/subscriptions?status=inactive&sortBy=${sortBy}" class="btn ${status === 'inactive' ? 'btn-primary' : ''}" style="margin-right: 0.5rem;">Архив</a>`;
-    html += `<a href="/app/subscriptions?status=all&sortBy=${sortBy}" class="btn ${status === 'all' ? 'btn-primary' : ''}">Все</a>`;
+    html += `<a href="/app/subscriptions?status=active&sortBy=${sortByLocal}" class="btn ${statusLocal === 'active' ? 'btn-primary' : ''}" style="margin-right: 0.5rem;">Активные</a>`;
+    html += `<a href="/app/subscriptions?status=inactive&sortBy=${sortByLocal}" class="btn ${statusLocal === 'inactive' ? 'btn-primary' : ''}" style="margin-right: 0.5rem;">Архив</a>`;
+    html += `<a href="/app/subscriptions?status=all&sortBy=${sortByLocal}" class="btn ${statusLocal === 'all' ? 'btn-primary' : ''}">Все</a>`;
     html += `</div>`;
-    html += `<div style="font-size: 0.9rem;">Сортировать по: <a href="/app/subscriptions?status=${status}&sortBy=date" style="margin-left: 0.5rem; color: ${sortBy === 'date' ? 'var(--primary-color)' : 'inherit'}; font-weight: ${sortBy === 'date' ? '600' : 'normal'}; text-decoration: none;">Дате</a> <a href="/app/subscriptions?status=${status}&sortBy=price" style="margin-left: 0.5rem; color: ${sortBy === 'price' ? 'var(--primary-color)' : 'inherit'}; font-weight: ${sortBy === 'price' ? '600' : 'normal'}; text-decoration: none;">Стоимости</a></div>`;
+    html += `<div style="font-size: 0.9rem;">Сортировать по: <a href="/app/subscriptions?status=${statusLocal}&sortBy=date" style="margin-left: 0.5rem; color: ${sortByLocal === 'date' ? 'var(--primary-color)' : 'inherit'}; font-weight: ${sortByLocal === 'date' ? '600' : 'normal'}; text-decoration: none;">Дате</a> <a href="/app/subscriptions?status=${statusLocal}&sortBy=price" style="margin-left: 0.5rem; color: ${sortByLocal === 'price' ? 'var(--primary-color)' : 'inherit'}; font-weight: ${sortByLocal === 'price' ? '600' : 'normal'}; text-decoration: none;">Стоимости</a></div>`;
     html += `</div>`;
 
     if (user.plan === 'FREE') {
@@ -43,8 +43,8 @@
             if (isNotUsing) rowStyle = 'background-color: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger);';
             else if (needsDecision) rowStyle = 'background-color: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b;';
 
-            const monthlyPrice = ExchangeRateService.convert(sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null ? sub.trialPrice : sub.price, sub.currency, 'USD') / (sub.billingCycle === 'YEARLY' ? 12 : (sub.billingCycle === 'WEEKLY' ? 7/30.44 : 1));
-            const yearlyPrice = ExchangeRateService.convert(sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null ? sub.trialPrice : sub.price, sub.currency, 'USD') * (sub.billingCycle === 'MONTHLY' ? 12 : (sub.billingCycle === 'WEEKLY' ? 52.14 : 1));
+            const monthlyPrice = ExchangeRateService.convert(sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null ? sub.trialPrice : sub.price) / (sub.billingCycle === 'YEARLY' ? 12 : (sub.billingCycle === 'WEEKLY' ? 7/30.44 : 1));
+            const yearlyPrice = ExchangeRateService.convert(sub.trialEndDate && new Date(sub.trialEndDate) <= new Date() && sub.trialPrice !== null ? sub.trialPrice : sub.price) * (sub.billingCycle === 'MONTHLY' ? 12 : (sub.billingCycle === 'WEEKLY' ? 52.14 : 1));
 
             html += `<tr class="sub-row" data-favorite="${sub.isFavorite}" style="${rowStyle}" data-monthly="${monthlyPrice}" data-yearly="${yearlyPrice}">`;
             html += `<td><input type="checkbox" class="sub-checkbox row-checkbox" data-id="${sub.id}"></td>`;
