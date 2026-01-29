@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubTracker - MVP</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header class="main-header">
+    <div class="container header-content">
+        <div class="left-controls">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+            <a href="./index.html" class="logo">SubTracker</a>
+        </div>
+        <nav class="nav">
+            
+                <!-- For logged in users keep header minimal: nav links are in sidebar -->
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle">🌙</button>
+                </div>
+            
+        </nav>
+    </div>
+</header>
+
+
+    <div class="app-layout">
+        <aside id="sidebar" class="sidebar" aria-hidden="true" aria-label="Main navigation">
+            <div class="sidebar-inner container">
+                <div class="sidebar-controls">
+                    <button id="sidebar-close" class="sidebar-close" aria-label="Close menu">✕</button>
+                    <button id="sidebar-pin" class="sidebar-pin" aria-pressed="false" title="Закрепить меню">📌</button>
+                </div>
+                <nav class="sidebar-nav">
+                    
+                        <a href="./dashboard.html" class="" ><span class="icon">🏠</span>Дашборд</a>
+                        <a href="./inbox.html" class="" ><span class="icon">📥</span>Inbox </a>
+                        <a href="./subscriptions.html" class="" ><span class="icon">📄</span>Подписки</a>
+                        <a href="./app/annual-report.html" class="" ><span class="icon">📊</span>Отчёт</a>
+                        <a href="./notifications.html" class="" ><span class="icon">🔔</span>Уведомления <span class="badge">1</span></a>
+                        <a href="./settings.html" class="" ><span class="icon">⚙️</span>Настройки</a>
+                        
+                        <a href="./auth/logout.html"><span class="icon">↪️</span>Выход</a>
+                    
+                </nav>
+            </div>
+        </aside>
+
+        <div id="page-content" class="page-content container">
+            
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubTracker - MVP</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header class="main-header">
+    <div class="container header-content">
+        <div class="left-controls">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+            <a href="./index.html" class="logo">SubTracker</a>
+        </div>
+        <nav class="nav">
+            
+                <!-- For logged in users keep header minimal: nav links are in sidebar -->
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle">🌙</button>
+                </div>
+            
+        </nav>
+    </div>
+</header>
+
+
+    <div class="app-layout">
+        <aside id="sidebar" class="sidebar" aria-hidden="true" aria-label="Main navigation">
+            <div class="sidebar-inner container">
+                <div class="sidebar-controls">
+                    <button id="sidebar-close" class="sidebar-close" aria-label="Close menu">✕</button>
+                    <button id="sidebar-pin" class="sidebar-pin" aria-pressed="false" title="Закрепить меню">📌</button>
+                </div>
+                <nav class="sidebar-nav">
+                    
+                        <a href="./dashboard.html" class="" ><span class="icon">🏠</span>Дашборд</a>
+                        <a href="./inbox.html" class="" ><span class="icon">📥</span>Inbox </a>
+                        <a href="./subscriptions.html" class="" ><span class="icon">📄</span>Подписки</a>
+                        <a href="./app/annual-report.html" class="" ><span class="icon">📊</span>Отчёт</a>
+                        <a href="./notifications.html" class="" ><span class="icon">🔔</span>Уведомления <span class="badge">1</span></a>
+                        <a href="./settings.html" class="" ><span class="icon">⚙️</span>Настройки</a>
+                        
+                        <a href="./auth/logout.html"><span class="icon">↪️</span>Выход</a>
+                    
+                </nav>
+            </div>
+        </aside>
+
+        <div id="page-content" class="page-content container">
+            
+<div style="text-align: center; margin-bottom: 3rem;">
+    <h1>Наши тарифы</h1>
+    <p style="color: var(--text-muted);">Выберите подходящий план для управления вашими подписками</p>
+</div>
+
+<div class="grid" style="max-width: 800px; margin: 0 auto;">
+    <div class="card" style="text-align: center;">
+        <h3>Бесплатно</h3>
+        <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">0$ <small style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted)">/ всегда</small></div>
+        <ul style="list-style: none; text-align: left; margin: 2rem 0; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">✓ До 10 активных подписок</li>
+            <li style="margin-bottom: 0.5rem;">✓ Уведомления о списаниях</li>
+            <li style="margin-bottom: 0.5rem; color: var(--text-muted);">✗ Рекламные блоки</li>
+        </ul>
+        <a href="./register.html" class="btn" style="border: 1px solid var(--primary-color); color: var(--primary-color); width: 100%;">Начать</a>
+    </div>
+    <div class="card" style="text-align: center; border-color: var(--primary-color); position: relative;">
+        <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--primary-color); color: white; padding: 2px 12px; border-radius: 12px; font-size: 0.8rem;">РЕКОМЕНДУЕМ</div>
+        <h3>PRO</h3>
+        <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">9.99$ <small style="font-size: 0.9rem; font-weight: normal; color: var(--text-muted)">/ навсегда (MVP)</small></div>
+        <ul style="list-style: none; text-align: left; margin: 2rem 0; padding: 0;">
+            <li style="margin-bottom: 0.5rem;">✓ Безлимитные подписки</li>
+            <li style="margin-bottom: 0.5rem;">✓ Уведомления о списаниях</li>
+            <li style="margin-bottom: 0.5rem;">✓ Без рекламы</li>
+            <li style="margin-bottom: 0.5rem;">✓ Приоритетная поддержка</li>
+        </ul>
+        <a href="./register.html" class="btn btn-primary" style="width: 100%;">Купить PRO</a>
+    </div>
+</div>
+
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 SubTracker MVP. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            if (toggle) toggle.textContent = '☀️';
+        }
+        if (toggle) toggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                toggle.textContent = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggle.textContent = '☀️';
+            }
+        });
+
+        // Sidebar toggle + pin
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const sidebarPin = document.getElementById('sidebar-pin');
+        const pageContent = document.getElementById('page-content');
+
+        const SIDEBAR_PIN_KEY = 'sidebarPinned';
+
+        function applyPinnedState() {
+            try {
+                const pinned = localStorage.getItem(SIDEBAR_PIN_KEY) === 'true';
+                if (pinned && window.innerWidth >= 900) {
+                    sidebar.classList.add('pinned');
+                    sidebar.classList.add('open');
+                    sidebar.setAttribute('aria-hidden', 'false');
+                    document.body.classList.add('sidebar-pinned');
+                    if (sidebarPin) sidebarPin.setAttribute('aria-pressed', 'true');
+                } else {
+                    sidebar.classList.remove('pinned');
+                    if (!sidebar.classList.contains('open')) sidebar.setAttribute('aria-hidden', 'true');
+                    document.body.classList.remove('sidebar-pinned');
+                    if (sidebarPin) sidebarPin.setAttribute('aria-pressed', 'false');
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebar.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('no-scroll');
+            if (menuToggle) menuToggle.setAttribute('aria-expanded','true');
+            const firstLink = sidebar.querySelector('a');
+            if (firstLink) firstLink.focus();
+        }
+
+        function closeSidebar() {
+            // do not close if pinned on desktop
+            const pinned = localStorage.getItem(SIDEBAR_PIN_KEY) === 'true';
+            if (pinned && window.innerWidth >= 900) return;
+
+            sidebar.classList.remove('open');
+            sidebar.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('no-scroll');
+            if (menuToggle) menuToggle.setAttribute('aria-expanded','false');
+            if (menuToggle) menuToggle.focus();
+        }
+
+        function togglePin() {
+            const pinned = localStorage.getItem(SIDEBAR_PIN_KEY) === 'true';
+            const newVal = !pinned;
+            localStorage.setItem(SIDEBAR_PIN_KEY, newVal ? 'true' : 'false');
+            applyPinnedState();
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+        if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+        if (sidebarPin) sidebarPin.addEventListener('click', togglePin);
+
+        // close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+        });
+
+        // click outside to close (on overlays)
+        pageContent && pageContent.addEventListener('click', (e) => {
+            if (sidebar.classList.contains('open') && !sidebar.classList.contains('pinned')) closeSidebar();
+        });
+
+        // on resize apply pinned state (if pinned becomes irrelevant on small screens)
+        window.addEventListener('resize', applyPinnedState);
+
+        // initial apply
+        applyPinnedState();
+    </script>
+</body>
+</html>
+
+
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2026 SubTracker MVP. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            if (toggle) toggle.textContent = '☀️';
+        }
+        if (toggle) toggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                toggle.textContent = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                toggle.textContent = '☀️';
+            }
+        });
+
+        // Sidebar toggle + pin
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebar-close');
+        const sidebarPin = document.getElementById('sidebar-pin');
+        const pageContent = document.getElementById('page-content');
+
+        const SIDEBAR_PIN_KEY = 'sidebarPinned';
+
+        function applyPinnedState() {
+            try {
+                const pinned = localStorage.getItem(SIDEBAR_PIN_KEY) === 'true';
+                if (pinned && window.innerWidth >= 900) {
+                    sidebar.classList.add('pinned');
+                    sidebar.classList.add('open');
+                    sidebar.setAttribute('aria-hidden', 'false');
+                    document.body.classList.add('sidebar-pinned');
+                    if (sidebarPin) sidebarPin.setAttribute('aria-pressed', 'true');
+                } else {
+                    sidebar.classList.remove('pinned');
+                    if (!sidebar.classList.contains('open')) sidebar.setAttribute('aria-hidden', 'true');
+                    document.body.classList.remove('sidebar-pinned');
+                    if (sidebarPin) sidebarPin.setAttribute('aria-pressed', 'false');
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebar.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('no-scroll');
+            if (menuToggle) menuToggle.setAttribute('aria-expanded','true');
+            const firstLink = sidebar.querySelector('a');
+            if (firstLink) firstLink.focus();
+        }
+
+        function closeSidebar() {
+            // do not close if pinned on desktop
+            const pinned = localStorage.getItem(SIDEBAR_PIN_KEY) === 'true';
+            if (pinned && window.innerWidth >= 900) return;
+
+            sidebar.classList.remove('open');
+            sidebar.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('no-scroll');
+            if (menuToggle) menuToggle.setAttribute('aria-expanded','false');
+            if (menuToggle) menuToggle.focus();
+        }
+
+        function togglePin() {
+            const pinned = localStorage.getItem(SIDEBAR_PIN_KEY) === 'true';
+            const newVal = !pinned;
+            localStorage.setItem(SIDEBAR_PIN_KEY, newVal ? 'true' : 'false');
+            applyPinnedState();
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+        if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+        if (sidebarPin) sidebarPin.addEventListener('click', togglePin);
+
+        // close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('open')) closeSidebar();
+        });
+
+        // click outside to close (on overlays)
+        pageContent && pageContent.addEventListener('click', (e) => {
+            if (sidebar.classList.contains('open') && !sidebar.classList.contains('pinned')) closeSidebar();
+        });
+
+        // on resize apply pinned state (if pinned becomes irrelevant on small screens)
+        window.addEventListener('resize', applyPinnedState);
+
+        // initial apply
+        applyPinnedState();
+    </script>
+</body>
+</html>
