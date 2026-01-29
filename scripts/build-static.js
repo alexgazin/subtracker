@@ -125,7 +125,7 @@ function makeMockLocals() {
   const cards = [
     { id: 1, merchant: 'Netflix', amount: 12.99, date: now.toISOString(), status: 'pending' }
   ];
-  const report = { year: new Date().getFullYear(), total: 123.45, subscriptions };
+  const report = { year: new Date().getFullYear(), total: 123.45, subscriptions, inflationDetails: [], totalSpentYear: 500 };
   const stats = { monthly: 12.34, yearly: 148.08, usersCount: 1, subsCount: subscriptions.length, eventsCount: 5 };
   const monthlyTotal = stats.monthly;
   const yearlyTotal = stats.yearly;
