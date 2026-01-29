@@ -120,7 +120,7 @@ function makeMockLocals() {
     { id: 1, merchant: 'Spotify', amount: 9.99, currency: 'USD', nextDate: now.toISOString(), favorite: false, utility: false, name: 'Spotify', billingCycle: 'MONTHLY', price: 9.99, trialPrice: null, trialEndDate: null, nextBillingDate: now.toISOString(), isFavorite: false, utilityStatus: 'ACTIVE', utilityStatusUpdatedAt: now.toISOString() }
   ];
   const users = [
-    { id: 1, email: 'admin@example.com', role: 'ADMIN', plan: 'PRO', createdAt: now.toISOString() }
+    { id: 1, email: 'admin@example.com', role: 'ADMIN', plan: 'PRO', createdAt: now.toISOString(), _count: { subscriptions: subscriptions.length }, lastLoginAt: now.toISOString() }
   ];
   const cards = [
     { id: 1, merchant: 'Netflix', amount: 12.99, date: now.toISOString(), status: 'pending' }
