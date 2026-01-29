@@ -13,6 +13,8 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "file:./prisma/dev.db"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,10 +22,18 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
-      - name: Install root deps
-        run: npm ci
+      - name: Install root deps (ignore scripts)
+        run: npm ci --ignore-scripts
+
+      - name: Ensure prisma dev.db exists
+        run: |
+          mkdir -p prisma
+          node -e "const fs=require('fs'); if(!fs.existsSync('prisma/dev.db')) fs.writeFileSync('prisma/dev.db','')"
+
+      - name: Run prisma generate (CI)
+        run: npx prisma generate
 
       - name: Install UI deps & build
         working-directory: ui
