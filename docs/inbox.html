@@ -48,7 +48,9 @@
         </aside>
 
         <div id="page-content" class="page-content container">
-            <!DOCTYPE html>
+            
+
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -98,36 +100,7 @@
         </aside>
 
         <div id="page-content" class="page-content container">
-            
-<div style="text-align: center; padding: 4rem 0;">
-    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Управляй подписками с умом</h1>
-    <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem;">
-        Отслеживай расходы, получай уведомления и никогда не переплачивай за забытые сервисы.
-    </p>
-    <a href="./register.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Попробовать бесплатно</a>
-</div>
-
-<div class="grid">
-    <div class="card">
-        <h3>Всё в одном месте</h3>
-        <p>Netflix, Spotify, Cloud — добавь все свои подписки в единый список.</p>
-    </div>
-    <div class="card">
-        <h3>Умные уведомления</h3>
-        <p>Мы напомним вам о списании за 3 дня и в день оплаты.</p>
-    </div>
-    <div class="card">
-        <h3>Аналитика расходов</h3>
-        <p>Узнайте, сколько вы тратите в месяц и в год на цифровые сервисы.</p>
-    </div>
-</div>
-
-<div style="text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
-    <a href="./privacy.html" style="margin: 0 1rem; color: inherit;">Политика конфиденциальности</a>
-    <a href="./terms.html" style="margin: 0 1rem; color: inherit;">Условия использования</a>
-    <a href="./support.html" style="margin: 0 1rem; color: inherit;">Поддержка</a>
-</div>
-
+            <div style="max-width: 800px; margin: 0 auto;"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;"><h2 style="margin: 0;">Inbox платежей</h2><span style="font-size: 0.9rem; color: var(--text-muted);">1 ожидают подтверждения</span></div><div class="inbox-container"><div id="card-1" class="inbox-card"><div class="inbox-header"><div><div class="inbox-title"></div><div class="inbox-date">Ожидалось: Invalid Date</div></div><div class="inbox-amount">12.99 undefined</div></div><p style="font-size: 0.95rem; color: var(--text-color); margin-bottom: 1rem;">Мы ожидали списание по этой подписке. Что случилось?</p><div class="inbox-actions"><button class="btn-inbox paid" onclick="handleResponse('1', 'PAID')">✅ Оплатил</button><button class="btn-inbox failed" onclick="handleResponse('1', 'NOT_CHARGED')">❓ Не списалось</button><button class="btn-inbox cancelled" onclick="handleResponse('1', 'CANCELLED')">❌ Отменил</button></div></div></div></div><script>async function handleResponse(cardId, response) {const cardElement = document.getElementById('card-' + cardId); if (!cardElement) return;cardElement.style.opacity = '0.5'; cardElement.style.pointerEvents = 'none';try {const res = await fetch('/app/inbox/response', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cardId, response }) });const data = await res.json();if (data.success) {cardElement.style.transform = 'translateX(100%)'; cardElement.style.opacity = '0';setTimeout(() => { cardElement.remove(); showToast('Ответ записан', cardId); checkEmptyState(); updateBadges(); }, 300);} else { throw new Error(data.error); }} catch (err) { console.error('Error:', err); if(cardElement){ cardElement.style.opacity='1'; cardElement.style.pointerEvents='all'; } alert('Ошибка: ' + err.message); }}function showToast(message, cardId) {const existing = document.querySelector('.toast'); if (existing) existing.remove();const toast = document.createElement('div'); toast.className = 'toast'; toast.innerHTML = '<span>' + message + '</span><button class="toast-undo" onclick="undoResponse('' + cardId + '')">Отменить</button>'; document.body.appendChild(toast);setTimeout(() => { if (toast.parentElement) { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); } }, 5000);}async function undoResponse(cardId) { const toast = document.querySelector('.toast'); if (toast) toast.remove(); try { const res = await fetch('/app/inbox/undo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cardId }) }); const data = await res.json(); if (data.success) { window.location.reload(); } } catch (err) { console.error('Undo error:', err); } }function checkEmptyState() { const container = document.querySelector('.inbox-container'); if (container && container.children.length === 0) { window.location.reload(); } }function updateBadges() { const badges = document.querySelectorAll('.inbox-badge'); badges.forEach(badge => { const count = parseInt(badge.textContent) - 1; if (count <= 0) { badge.remove(); } else { badge.textContent = count; } }); }</script>
         </div>
     </div>
 

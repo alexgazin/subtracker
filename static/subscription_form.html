@@ -48,7 +48,8 @@
         </aside>
 
         <div id="page-content" class="page-content container">
-            <!DOCTYPE html>
+            
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -99,34 +100,91 @@
 
         <div id="page-content" class="page-content container">
             
-<div style="text-align: center; padding: 4rem 0;">
-    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Управляй подписками с умом</h1>
-    <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem;">
-        Отслеживай расходы, получай уведомления и никогда не переплачивай за забытые сервисы.
-    </p>
-    <a href="./register.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Попробовать бесплатно</a>
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="margin-bottom: 1.5rem;">Новая подписка</h2>
+        
+        <form action="/app/subscriptions" method="POST">
+            <div class="form-group">
+                <label>Название сервиса</label>
+                <input type="text" id="serviceName" name="name" placeholder="Netflix, Spotify..." required value="">
+            </div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="form-group">
+                    <label>Цена</label>
+                    <input type="number" step="0.01" name="price" required value="">
+                </div>
+                <div class="form-group">
+                    <label>Валюта</label>
+                    <select name="currency">
+                        <option value="USD" >USD ($)</option>
+                        <option value="EUR" >EUR (€)</option>
+                        <option value="RUB" >RUB (₽)</option>
+                        <option value="GBP" >GBP (£)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Период оплаты</label>
+                <select name="billingCycle">
+                    <option value="MONTHLY" >Раз в месяц</option>
+                    <option value="YEARLY" >Раз в год</option>
+                    <option value="WEEKLY" >Раз в неделю</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Дата первого списания</label>
+                <input type="date" name="startDate" required value="2026-01-29">
+            </div>
+            <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px dashed var(--primary-color);">
+                <p style="font-weight: bold; margin-bottom: 0.5rem; color: var(--primary-color);">Анти-триал ловушка</p>
+                <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Конец промо-периода</label>
+                        <input type="date" name="trialEndDate" value="">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Цена после промо</label>
+                        <input type="number" step="0.01" name="trialPrice" placeholder="Напр. 9.99" value="">
+                    </div>
+                </div>
+                <small style="display: block; margin-top: 0.5rem; color: var(--text-muted);">Мы напомним вам, когда цена скоро изменится.</small>
+            </div>
+            <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                <p style="font-weight: bold; margin-bottom: 0.5rem;">Статус полезности</p>
+                <div class="form-group">
+                    <label>Как часто используете?</label>
+                    <select name="utilityStatus">
+                        <option value="ACTIVE" >✅ Пользуюсь активно</option>
+                        <option value="SOMETIMES" >😐 Иногда</option>
+                        <option value="NOT_USING" >❌ Не пользуюсь</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Когда последний раз пользовались?</label>
+                    <input type="date" name="lastUsedAt" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Категория (опц.)</label>
+                <input type="text" name="category" placeholder="Entertainment, Work..." value="">
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1;">Сохранить</button>
+                <a href="./subscriptions.html" class="btn" style="border: 1px solid var(--border-color); flex: 1; text-align: center;">Отмена</a>
+            </div>
+        </form>
+    </div>
 </div>
 
-<div class="grid">
-    <div class="card">
-        <h3>Всё в одном месте</h3>
-        <p>Netflix, Spotify, Cloud — добавь все свои подписки в единый список.</p>
-    </div>
-    <div class="card">
-        <h3>Умные уведомления</h3>
-        <p>Мы напомним вам о списании за 3 дня и в день оплаты.</p>
-    </div>
-    <div class="card">
-        <h3>Аналитика расходов</h3>
-        <p>Узнайте, сколько вы тратите в месяц и в год на цифровые сервисы.</p>
-    </div>
-</div>
-
-<div style="text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
-    <a href="./privacy.html" style="margin: 0 1rem; color: inherit;">Политика конфиденциальности</a>
-    <a href="./terms.html" style="margin: 0 1rem; color: inherit;">Условия использования</a>
-    <a href="./support.html" style="margin: 0 1rem; color: inherit;">Поддержка</a>
-</div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const nameParam = urlParams.get('name');
+    if (nameParam && document.getElementById('serviceName')) {
+        document.getElementById('serviceName').value = nameParam;
+    }
+</script>
 
         </div>
     </div>

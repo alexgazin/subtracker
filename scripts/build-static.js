@@ -136,6 +136,17 @@ function makeMockLocals() {
     getSymbol: (currency) => ({ USD: '$', EUR: '€', RUB: '₽' }[currency] || currency)
   };
 
+  // spending breakdown mock (used on dashboard)
+  const spendingByCategory = [
+    { name: 'Entertainment', value: 6 },
+    { name: 'Subscriptions', value: 4.34 }
+  ];
+
+  // upcoming payments mock (used on dashboard)
+  const upcomingPayments = [
+    { id: 1, name: 'Spotify', price: 9.99, currency: 'USD', nextBillingDate: new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString() }
+  ];
+
   return {
     user: { id: 1, email: 'user@example.com', role: 'USER', plan: 'FREE' },
     page: 'home',
@@ -155,6 +166,8 @@ function makeMockLocals() {
     yearlyTotal,
     cards,
     recentUsers: users,
+    spendingByCategory,
+    upcomingPayments,
     // helper flags
     isAdmin: false,
     sortBy: 'date',

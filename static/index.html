@@ -4,21 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SubTracker - MVP</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <header class="main-header">
     <div class="container header-content">
         <div class="left-controls">
             <button id="menu-toggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
-            <a href="/" class="logo">SubTracker</a>
+            <a href="./index.html" class="logo">SubTracker</a>
         </div>
         <nav class="nav">
             
-                <a href="/pricing">Тарифы</a>
-                <a href="/login">Вход</a>
-                <a href="/register" class="btn btn-primary">Начать бесплатно</a>
-                <button class="theme-toggle" id="theme-toggle">🌙</button>
+                <!-- For logged in users keep header minimal: nav links are in sidebar -->
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle">🌙</button>
+                </div>
             
         </nav>
     </div>
@@ -34,9 +34,14 @@
                 </div>
                 <nav class="sidebar-nav">
                     
-                        <a href="/pricing"><span class="icon">💳</span>Тарифы</a>
-                        <a href="/login"><span class="icon">🔑</span>Вход</a>
-                        <a href="/register" class="btn btn-primary"><span class="icon">✨</span>Начать бесплатно</a>
+                        <a href="./dashboard.html" class="" ><span class="icon">🏠</span>Дашборд</a>
+                        <a href="./inbox.html" class="" ><span class="icon">📥</span>Inbox </a>
+                        <a href="./subscriptions.html" class="" ><span class="icon">📄</span>Подписки</a>
+                        <a href="./app/annual-report.html" class="" ><span class="icon">📊</span>Отчёт</a>
+                        <a href="./notifications.html" class="" ><span class="icon">🔔</span>Уведомления <span class="badge">1</span></a>
+                        <a href="./settings.html" class="" ><span class="icon">⚙️</span>Настройки</a>
+                        
+                        <a href="./auth/logout.html"><span class="icon">↪️</span>Выход</a>
                     
                 </nav>
             </div>
@@ -49,21 +54,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SubTracker - MVP</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <header class="main-header">
     <div class="container header-content">
         <div class="left-controls">
             <button id="menu-toggle" class="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
-            <a href="/" class="logo">SubTracker</a>
+            <a href="./index.html" class="logo">SubTracker</a>
         </div>
         <nav class="nav">
             
-                <a href="/pricing">Тарифы</a>
-                <a href="/login">Вход</a>
-                <a href="/register" class="btn btn-primary">Начать бесплатно</a>
-                <button class="theme-toggle" id="theme-toggle">🌙</button>
+                <!-- For logged in users keep header minimal: nav links are in sidebar -->
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle">🌙</button>
+                </div>
             
         </nav>
     </div>
@@ -79,9 +84,14 @@
                 </div>
                 <nav class="sidebar-nav">
                     
-                        <a href="/pricing"><span class="icon">💳</span>Тарифы</a>
-                        <a href="/login"><span class="icon">🔑</span>Вход</a>
-                        <a href="/register" class="btn btn-primary"><span class="icon">✨</span>Начать бесплатно</a>
+                        <a href="./dashboard.html" class="" ><span class="icon">🏠</span>Дашборд</a>
+                        <a href="./inbox.html" class="" ><span class="icon">📥</span>Inbox </a>
+                        <a href="./subscriptions.html" class="" ><span class="icon">📄</span>Подписки</a>
+                        <a href="./app/annual-report.html" class="" ><span class="icon">📊</span>Отчёт</a>
+                        <a href="./notifications.html" class="" ><span class="icon">🔔</span>Уведомления <span class="badge">1</span></a>
+                        <a href="./settings.html" class="" ><span class="icon">⚙️</span>Настройки</a>
+                        
+                        <a href="./auth/logout.html"><span class="icon">↪️</span>Выход</a>
                     
                 </nav>
             </div>
@@ -94,7 +104,7 @@
     <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem;">
         Отслеживай расходы, получай уведомления и никогда не переплачивай за забытые сервисы.
     </p>
-    <a href="/register" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Попробовать бесплатно</a>
+    <a href="./register.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Попробовать бесплатно</a>
 </div>
 
 <div class="grid">
@@ -113,9 +123,9 @@
 </div>
 
 <div style="text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
-    <a href="/privacy" style="margin: 0 1rem; color: inherit;">Политика конфиденциальности</a>
-    <a href="/terms" style="margin: 0 1rem; color: inherit;">Условия использования</a>
-    <a href="/support" style="margin: 0 1rem; color: inherit;">Поддержка</a>
+    <a href="./privacy.html" style="margin: 0 1rem; color: inherit;">Политика конфиденциальности</a>
+    <a href="./terms.html" style="margin: 0 1rem; color: inherit;">Условия использования</a>
+    <a href="./support.html" style="margin: 0 1rem; color: inherit;">Поддержка</a>
 </div>
 
         </div>

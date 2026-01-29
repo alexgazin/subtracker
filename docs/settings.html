@@ -48,7 +48,8 @@
         </aside>
 
         <div id="page-content" class="page-content container">
-            <!DOCTYPE html>
+            
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -99,34 +100,141 @@
 
         <div id="page-content" class="page-content container">
             
-<div style="text-align: center; padding: 4rem 0;">
-    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Управляй подписками с умом</h1>
-    <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem;">
-        Отслеживай расходы, получай уведомления и никогда не переплачивай за забытые сервисы.
-    </p>
-    <a href="./register.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Попробовать бесплатно</a>
+<div style="max-width: 600px; margin: 0 auto;">
+    <h2>Настройки</h2>
+    
+    
+    
+
+    <div class="card" style="margin-top: 1.5rem;">
+        <h3 style="margin-bottom: 1rem;">Ваш аккаунт</h3>
+        <p><strong>Email:</strong> user@example.com</p>
+        <p><strong>Текущий план:</strong> <span style="color: var(--primary-color); font-weight: bold;">FREE</span></p>
+        
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+            <h4 style="margin-bottom: 1rem;">Управление подпиской</h4>
+            
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Перейдите на PRO план, чтобы получить неограниченное количество подписок и убрать рекламу.
+                </p>
+                <form action="/app/settings/upgrade-demo" method="POST">
+                    <button type="submit" class="btn btn-primary">Активировать PRO (Демо)</button>
+                </form>
+            
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 1.5rem;">Смена пароля</h3>
+        <form action="/app/settings/change-password" method="POST" id="changePasswordForm">
+            <div class="form-group">
+                <label>Новый пароль</label>
+                <div class="password-input-wrapper">
+                    <input type="password" name="newPassword" id="newPassword" required>
+                    <button type="button" class="password-toggle" id="toggleNewPassword" aria-label="Показать/скрыть пароль">
+                        👁️
+                    </button>
+                </div>
+                <ul class="password-requirements">
+                    <li id="req-length" class="requirement">От 8 до 15 символов</li>
+                    <li id="req-case" class="requirement">Прописные и строчные буквы</li>
+                    <li id="req-number" class="requirement">Минимум одна цифра</li>
+                    <li id="req-special" class="requirement">Минимум один спецсимвол</li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <label>Повторите новый пароль</label>
+                <div class="password-input-wrapper">
+                    <input type="password" name="confirmPassword" id="confirmPassword" required>
+                    <button type="button" class="password-toggle" id="toggleConfirmPassword" aria-label="Показать/скрыть пароль">
+                        👁️
+                    </button>
+                </div>
+                <p id="match-error" class="error-msg" style="display: none; font-size: 0.8rem; margin-top: 0.5rem;">Пароли не совпадают</p>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: 1rem;">Обновить пароль</button>
+        </form>
+    </div>
 </div>
 
-<div class="grid">
-    <div class="card">
-        <h3>Всё в одном месте</h3>
-        <p>Netflix, Spotify, Cloud — добавь все свои подписки в единый список.</p>
-    </div>
-    <div class="card">
-        <h3>Умные уведомления</h3>
-        <p>Мы напомним вам о списании за 3 дня и в день оплаты.</p>
-    </div>
-    <div class="card">
-        <h3>Аналитика расходов</h3>
-        <p>Узнайте, сколько вы тратите в месяц и в год на цифровые сервисы.</p>
-    </div>
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const newPasswordInput = document.getElementById('newPassword');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const submitBtn = document.getElementById('submitBtn');
+        const matchError = document.getElementById('match-error');
+        
+        const toggleNew = document.getElementById('toggleNewPassword');
+        const toggleConfirm = document.getElementById('toggleConfirmPassword');
 
-<div style="text-align: center; padding: 2rem; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
-    <a href="./privacy.html" style="margin: 0 1rem; color: inherit;">Политика конфиденциальности</a>
-    <a href="./terms.html" style="margin: 0 1rem; color: inherit;">Условия использования</a>
-    <a href="./support.html" style="margin: 0 1rem; color: inherit;">Поддержка</a>
-</div>
+        const requirements = {
+            length: document.getElementById('req-length'),
+            case: document.getElementById('req-case'),
+            number: document.getElementById('req-number'),
+            special: document.getElementById('req-special')
+        };
+
+        function setupToggle(btn, input) {
+            btn.addEventListener('click', () => {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                btn.textContent = type === 'password' ? '👁️' : '🙈';
+            });
+        }
+
+        setupToggle(toggleNew, newPasswordInput);
+        setupToggle(toggleConfirm, confirmPasswordInput);
+
+        function validate() {
+            const val = newPasswordInput.value;
+            const confirmVal = confirmPasswordInput.value;
+            
+            const isLengthValid = val.length >= 8 && val.length <= 15;
+            requirements.length.classList.toggle('valid', isLengthValid);
+            
+            const isCaseValid = /[a-z]/.test(val) && /[A-Z]/.test(val);
+            requirements.case.classList.toggle('valid', isCaseValid);
+            
+            const isNumberValid = /\d/.test(val);
+            requirements.number.classList.toggle('valid', isNumberValid);
+            
+            const isSpecialValid = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+            requirements.special.classList.toggle('valid', isSpecialValid);
+
+            const passwordsMatch = val === confirmVal && val !== '';
+            
+            if (confirmVal !== '') {
+                matchError.style.display = passwordsMatch ? 'none' : 'block';
+            } else {
+                matchError.style.display = 'none';
+            }
+
+            const isAllValid = isLengthValid && isCaseValid && isNumberValid && isSpecialValid && passwordsMatch;
+            // Мы не блокируем кнопку программно, чтобы работала серверная валидация, 
+            // но визуально можем подсказать.
+        }
+
+        newPasswordInput.addEventListener('input', validate);
+        confirmPasswordInput.addEventListener('input', validate);
+
+        document.getElementById('changePasswordForm').addEventListener('submit', (e) => {
+            const val = newPasswordInput.value;
+            const confirmVal = confirmPasswordInput.value;
+            const isAllValid = (val.length >= 8 && val.length <= 15) && 
+                              (/[a-z]/.test(val) && /[A-Z]/.test(val)) &&
+                              (/\d/.test(val)) &&
+                              (/[!@#$%^&*(),.?":{}|<>]/.test(val)) &&
+                              (val === confirmVal);
+            
+            if (!isAllValid) {
+                e.preventDefault();
+                alert('Пожалуйста, исправьте ошибки в пароле');
+            }
+        });
+    });
+</script>
 
         </div>
     </div>
